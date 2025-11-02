@@ -5,24 +5,49 @@ services:
       - ./data:/data
     depends_on:
       - preprocessor
+    networks:
+      - aiops-net
 
   preprocessor:
     build: ./preprocessor
     ports:
-      - "5000:5000"
-    depends_on:
-      - detector
-
-  detector:
-    build: ./detector
-    ports:
-      - "6000:6000"
+      - "5001:5001"
     volumes:
       - ./models:/models
     depends_on:
-      - visualizer
+      - detector
+    networks:
+      - aiops-net
 
-  visualizer:
-    build: ./visualizer
+  detector:
+    build: ./detector
+    depends_on:
+      - visualizer-api
+    volumes:
+      - ./models:/models
+    networks:
+      - aiops-net
+
+  visualizer-api:
+    build: ./visualizer-api
+    ports:
+      - "8502:8502"
+    volumes:
+      - ./data:/data
+    networks:
+      - aiops-net
+
+  visualizer-ui:
+    build: ./visualizer-ui
     ports:
       - "8501:8501"
+    volumes:
+      - ./data:/data
+    depends_on:
+      - visualizer-api
+    networks:
+      - aiops-net
+
+networks:
+  aiops-net:
+    driver: bridge
