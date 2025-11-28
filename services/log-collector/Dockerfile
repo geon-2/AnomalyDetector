@@ -4,8 +4,8 @@ WORKDIR /app
 
 RUN pip install --no-cache-dir requests
 
-# Copy only necessary data file (not the whole data folder)
-COPY data/HDFS_2k.log /data/HDFS_2k.log
+# Data file will be copied by Makefile before build
+COPY HDFS_2k.log /data/HDFS_2k.log
 
 COPY main.py .
 

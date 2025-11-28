@@ -10,7 +10,7 @@ RUN pip install --no-cache-dir \
     joblib==1.3.2 \
     drain3==0.9.11
 
-# Copy model files
+# Model files will be copied by Makefile before build
 COPY models/ /models/
 
 COPY main.py .
