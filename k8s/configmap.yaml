@@ -5,20 +5,10 @@ metadata:
   namespace: default
 data:
   # Log Collector 설정
-  LOG_FILE: "/data/test_anomaly.log"
+  LOG_FILE: "/data/HDFS_2k.log"
   BATCH_SIZE: "10"
   DELAY: "0.5"
 
   # Detector 설정
-  MAX_SEQUENCE_LENGTH: "20"
-  MODEL_TYPE: "gru_autoencoder"
-
-  # Service URLs
-  NORMALIZER_URL: "http://normalizer-service:5001/normalize"
-  DETECTOR_URL: "http://detector-service:5002/analyze"
-  VISUALIZER_URL: "http://visualizer-service:8502/event"
-  LLM_SERVICE_URL: "http://vllm-service:8000"
-
-  # LLM Settings
-  USE_LLM: "true"
-  AUTO_SCHEMA_GENERATION: "true"
+  MAX_SEQUENCE_LENGTH: "50"
+  MODEL_TYPE: "gru"

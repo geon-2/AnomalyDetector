@@ -61,18 +61,6 @@ spec:
         env:
         - name: DETECTOR_URL
           value: "http://detector-service:5002/analyze"
-        - name: LLM_SERVICE_URL
-          value: "http://llm-service:8000/generate_schema"
-        - name: USE_LLM
-          valueFrom:
-            configMapKeyRef:
-              name: anomaly-detector-config
-              key: USE_LLM
-        - name: AUTO_SCHEMA_GENERATION
-          valueFrom:
-            configMapKeyRef:
-              name: anomaly-detector-config
-              key: AUTO_SCHEMA_GENERATION
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -160,15 +148,3 @@ spec:
         imagePullPolicy: Never
         ports:
         - containerPort: 8000
-        env:
-        - name: BASE_MODEL
-          value: "meta-llama/Meta-Llama-3-8B-Instruct"
-        - name: LORA_ADAPTER
-          value: "/models/llm/llama3-ecs-schema-generator"
-        resources:
-          limits:
-            memory: "8Gi"
-            cpu: "4"
-          requests:
-            memory: "4Gi"
-            cpu: "2"
