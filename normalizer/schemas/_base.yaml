@@ -1,20 +1,7 @@
 # schemas/_base.yaml
-# ECS (Elastic Common Schema) 9.2.0 기반 기본 스키마
-# 
-# 이 스키마는 ECS 9.2.0의 base, log, event 필드 세트를 참조합니다.
-# 참고: https://www.elastic.co/guide/en/ecs/9.2/index.html
-# 
-# ECS 9.2.0 필드 매핑:
-# - @timestamp: ECS base.@timestamp (required)
-# - message: ECS base.message
-# - log.level: ECS log.level
-# - log.source: custom (LogHub dataset identifier)
-# - event.id: ECS event.id
-#
 _meta:
   version: "1.0.0"
-  ecs_version: "9.2.0"
-  description: "LogHub 전체 로그에 공통으로 적용되는 최소 스키마 (ECS 9.2.0 기반)"
+  description: "LogHub 전체 로그에 공통으로 적용되는 최소 스키마"
 
 required:
   - "@timestamp"
@@ -85,6 +72,4 @@ fields:
       id:
         type: string
         description: "이벤트 고유 ID (해시 등)"
-      template_id:
-        type: string
-        description: "LogHub EventTemplate ID"
+      template_id

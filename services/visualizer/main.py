@@ -38,7 +38,8 @@ def receive_event():
         "loss": data.get("loss", 0.0),
         "threshold": data.get("threshold", 0.0),
         "status": data.get("status", "unknown"),
-        "log": data.get("log", {})
+        "log": data.get("log", {}),
+        "llm_analysis": data.get("llm_analysis")
     }
 
     events.append(event)
@@ -50,7 +51,13 @@ def receive_event():
     elif event["status"] == "normal":
         statistics["total_normal"] += 1
 
-    print(f"[visualizer] ✅ Event received: {event['status']} (loss={event['loss']:.6f})")
+    # LLM 분석 결과 로깅
+    if event.get("llm_analysis"):
+        severity = event["llm_analysis"].get("severity", "N/A")
+        pattern = event["llm_analysis"].get("pattern", "N/A")
+        print(f"[visualizer] ✅ Event received: {event['status']} (loss={event['loss']:.6f}, severity={severity}, pattern={pattern})")
+    else:
+        print(f"[visualizer] ✅ Event received: {event['status']} (loss={event['loss']:.6f})")
 
     return jsonify({"status": "success"}), 200
 

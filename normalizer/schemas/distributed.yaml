@@ -1,15 +1,6 @@
 # schemas/distributed.yaml
-# ECS 9.2.0 기반 분산 시스템 확장 스키마
-# 
-# 분산 시스템(HDFS, Hadoop, Spark, Zookeeper, OpenStack) 로그에 대한 
-# ECS 9.2.0 확장 필드를 정의합니다.
-# 
-# 참고: distributed.* 필드는 ECS 표준에 없는 커스텀 필드입니다.
-#       분산 시스템 특화 정보를 저장하기 위해 사용됩니다.
-#
 _meta:
   version: "1.0.0"
-  ecs_version: "9.2.0"
   extends: "_base.yaml"
   applies_to:
     - hdfs

@@ -1,19 +1,8 @@
 # mappings/hdfs.yaml
-# ECS 9.2.0 기반 HDFS 로그 매핑
-# 
-# LogHub HDFS 데이터셋을 ECS 9.2.0 형식으로 정규화합니다.
-# ECS 필드 매핑:
-# - @timestamp: ECS base.@timestamp (Date + Time 조합)
-# - log.level: ECS log.level (INFO → info)
-# - process.name: ECS process.name (Component 필드)
-# - message: ECS base.message (Content 필드)
-# - event.id: ECS event.id (자동 생성)
-#
 _meta:
   source: hdfs
   schema: distributed.yaml
-  ecs_version: "9.2.0"
-  description: "HDFS_v1/v2/v3 로그 → ECS 9.2.0 정규화 스키마 매핑"
+  description: "HDFS_v1/v2/v3 로그 → 정규화 스키마 매핑"
 
 defaults:
   log.source: hdfs
