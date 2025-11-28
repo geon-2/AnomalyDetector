@@ -294,7 +294,7 @@ curl -X POST http://localhost:8000/explain \
       "threshold": 0.003000
     },
     "status": "anomaly"
-  }' | python3 -m json.tool --ensure-ascii=false
+  }' | python3 -m json.tool
 ```
 
 **예상 출력:**
