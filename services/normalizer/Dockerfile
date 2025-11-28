@@ -4,7 +4,7 @@ WORKDIR /app
 
 RUN pip install --no-cache-dir flask requests pyyaml
 
-# normalizer 모듈 복사
+# Normalizer module will be copied by Makefile before build
 COPY normalizer/ ./normalizer/
 
 COPY main.py .

@@ -13,7 +13,9 @@ build:
 	docker build -t log-collector:latest ./services/log-collector && \
 	rm -f ./services/log-collector/HDFS_2k.log && \
 	echo "[2/5] Building normalizer..." && \
+	cp -r ./normalizer ./services/normalizer/normalizer && \
 	docker build -t normalizer:latest ./services/normalizer && \
+	rm -rf ./services/normalizer/normalizer && \
 	echo "[3/5] Building detector..." && \
 	mkdir -p ./services/detector/models && \
 	cp ./models/*.pkl ./services/detector/models/ 2>/dev/null || true && \
