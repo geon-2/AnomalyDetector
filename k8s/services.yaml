@@ -35,9 +35,14 @@ spec:
   selector:
     app: visualizer
   ports:
-  - protocol: TCP
+  - name: api
+    protocol: TCP
     port: 8502
     targetPort: 8502
+  - name: dashboard
+    protocol: TCP
+    port: 8501
+    targetPort: 8501
   type: NodePort
 ---
 apiVersion: v1

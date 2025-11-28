@@ -72,4 +72,6 @@ fields:
       id:
         type: string
         description: "이벤트 고유 ID (해시 등)"
-      template_id
+      template_id:
+        type: string
+        description: "로그 템플릿 ID"
