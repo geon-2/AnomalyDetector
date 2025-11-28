@@ -1,0 +1,25 @@
+_meta:
+  source: hpc
+  schema: supercomputer.yaml
+  description: "HPC 클러스터 로그 매핑"
+
+defaults:
+  log.source: hpc
+  log.category: supercomputer
+
+field_mapping:
+  Time: "@timestamp"
+  Node: host.name
+  Level: log.level
+  Event: message
+
+timestamp:
+  fields: [Time]
+  format: "%Y-%m-%d-%H:%M:%S"
+  timezone: UTC
+
+level_mapping:
+  INFO: info
+  WARN: warn
+  ERROR: error
+  FATAL: fatal

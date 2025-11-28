@@ -1,0 +1,27 @@
+_meta:
+  source: thunderbird
+  schema: supercomputer.yaml
+  description: "Thunderbird 슈퍼컴퓨터 로그 매핑"
+
+defaults:
+  log.source: thunderbird
+  log.category: supercomputer
+
+field_mapping:
+  Time: "@timestamp"
+  Node: host.name
+  Level: log.level
+  Component: supercomputer.component
+  Message: message
+
+timestamp:
+  fields: [Time]
+  format: "%Y-%m-%d-%H:%M:%S"
+  timezone: UTC
+
+level_mapping:
+  INFO: info
+  WARNING: warn
+  WARN: warn
+  ERROR: error
+  CRITICAL: fatal

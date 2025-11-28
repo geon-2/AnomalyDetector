@@ -1,0 +1,52 @@
+# LogHub 정규화 전체 설정
+
+project:
+  name: loghub-normalizer
+  version: "1.0.0"
+
+# 스키마 경로
+schemas:
+  base: schemas/_base.yaml
+  extensions:
+    - schemas/distributed.yaml
+    - schemas/supercomputer.yaml
+    - schemas/os.yaml
+    - schemas/server.yaml
+    - schemas/mobile.yaml
+
+# 매핑 경로
+mappings:
+  directory: mappings/
+
+# 데이터셋별 설정
+datasets:
+  hdfs:
+    mapping: mappings/hdfs.yaml
+    schema: distributed
+    
+  bgl:
+    mapping: mappings/bgl.yaml
+    schema: supercomputer
+    
+  apache:
+    mapping: mappings/apache.yaml
+    schema: server
+    
+  android:
+    mapping: mappings/android.yaml
+    schema: mobile
+    
+  linux:
+    mapping: mappings/linux.yaml
+    schema: os
+
+# 출력 설정
+output:
+  format: json  # 최종 출력은 JSON (기계 처리용)
+  directory: output/normalized/
+  filename_pattern: "{source}_{date}.json"
+  
+# 검증 설정
+validation:
+  strict_mode: false  # true면 필수 필드 누락 시 에러
+  log_failures: true

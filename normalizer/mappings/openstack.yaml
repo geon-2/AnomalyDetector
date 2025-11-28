@@ -1,0 +1,60 @@
+# mappings/openstack.yaml
+# ECS 9.2.0 기반 OpenStack 로그 매핑
+# 
+# LogHub OpenStack 데이터셋을 ECS 9.2.0 형식으로 정규화합니다.
+# ECS 필드 매핑:
+# - @timestamp: ECS base.@timestamp (Date + Time 조합, 밀리초 포함)
+# - log.level: ECS log.level
+# - process.name: ECS process.name (Component 필드)
+# - host.name: ECS host.name (Host 필드)
+# - message: ECS base.message (Content 필드)
+#
+_meta:
+  source: openstack
+  schema: distributed.yaml
+  ecs_version: "9.2.0"
+  description: "OpenStack 인프라 로그 → ECS 9.2.0 정규화 스키마 매핑"
+
+defaults:
+  log.source: openstack
+  log.category: distributed_system
+
+field_mapping:
+  Date: "@timestamp"
+  Time: "@timestamp"
+  Level: log.level
+  Component: process.name
+  Host: host.name
+  Content: message
+
+timestamp:
+  fields: [Date, Time]
+  format: "%Y-%m-%d %H:%M:%S.%f"
+  timezone: UTC
+
+level_mapping:
+  INFO: info
+  WARN: warn
+  WARNING: warn
+  ERROR: error
+  CRITICAL: fatal
+  DEBUG: debug
+
+pattern_extraction:
+  - field: distributed.container_id
+    pattern: "instance-([0-9a-fA-F\\-]+)"
+
+  - field: distributed.operation
+    patterns:
+      - pattern: "Starting.*instance"
+        value: launch
+      - pattern: "Deleting.*instance"
+        value: delete
+      - pattern: "Rebuilding.*instance"
+        value: allocate
+      - pattern: "Creating volume"
+        value: allocate
+      - pattern: "Deleting volume"
+        value: delete
+      - pattern: "Scheduling"
+        value: schedule

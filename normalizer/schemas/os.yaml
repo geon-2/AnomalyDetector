@@ -1,0 +1,43 @@
+_meta:
+  version: "1.0.0"
+  extends: "_base.yaml"
+  applies_to:
+    - windows
+    - linux
+    - mac
+
+fields:
+  os:
+    type: object
+    required: false
+    description: "운영체제 관련 필드"
+    fields:
+      type:
+        type: enum
+        values: [windows, linux, mac]
+        description: "OS 종류"
+      family:
+        type: string
+        description: "OS 패밀리 (windows, unix 등)"
+      version:
+        type: string
+        description: "OS 버전 문자열"
+      build:
+        type: string
+        description: "빌드/패치 레벨"
+      facility:
+        type: string
+        description: "syslog facility (Linux/Mac)"
+      event_id:
+        type: string
+        description: "Windows Event ID 또는 코드"
+
+  os_user:
+    type: object
+    required: false
+    description: "OS 사용자 정보"
+    fields:
+      name:
+        type: string
+      domain:
+        type: string

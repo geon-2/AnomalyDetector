@@ -1,0 +1,44 @@
+# mappings/zookeeper.yaml
+_meta:
+  source: zookeeper
+  schema: distributed.yaml
+  description: "ZooKeeper 서비스 로그 → 정규화 스키마 매핑"
+
+defaults:
+  log.source: zookeeper
+  log.category: distributed_system
+
+field_mapping:
+  Date: "@timestamp"
+  Time: "@timestamp"
+  Level: log.level
+  Component: process.name
+  Content: message
+
+timestamp:
+  fields: [Date, Time]
+  format: "%Y-%m-%d %H:%M:%S"
+  timezone: UTC
+
+level_mapping:
+  INFO: info
+  WARN: warn
+  WARNING: warn
+  ERROR: error
+  DEBUG: debug
+  FATAL: fatal
+
+pattern_extraction:
+  - field: distributed.session_id
+    pattern: "session 0x([0-9a-fA-F]+)"
+
+  - field: distributed.operation
+    patterns:
+      - pattern: "Client session timed out"
+        value: disconnect
+      - pattern: "Established session"
+        value: connect
+      - pattern: "Closed socket connection"
+        value: disconnect
+      - pattern: "Received.*request"
+        value: other

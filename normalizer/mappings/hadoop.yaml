@@ -1,0 +1,57 @@
+# mappings/hadoop.yaml
+# ECS 9.2.0 기반 Hadoop 로그 매핑
+# 
+# LogHub Hadoop 데이터셋을 ECS 9.2.0 형식으로 정규화합니다.
+# ECS 필드 매핑:
+# - @timestamp: ECS base.@timestamp (Date + Time 조합, 밀리초 포함)
+# - log.level: ECS log.level
+# - process.name: ECS process.name (Component 필드)
+# - message: ECS base.message (Content 필드)
+#
+_meta:
+  source: hadoop
+  schema: distributed.yaml
+  ecs_version: "9.2.0"
+  description: "Hadoop MapReduce job 로그 → ECS 9.2.0 정규화 스키마 매핑"
+
+defaults:
+  log.source: hadoop
+  log.category: distributed_system
+
+field_mapping:
+  Date: "@timestamp"        # yymmdd 또는 yyyy-mm-dd 등 실제 포맷에 맞게 조정
+  Time: "@timestamp"
+  Level: log.level
+  Component: process.name
+  Content: message
+
+timestamp:
+  fields: [Date, Time]
+  format: "%Y-%m-%d %H:%M:%S,%f"   # "2015-10-18 18:01:47,978" 형식
+  timezone: UTC
+
+level_mapping:
+  INFO: info
+  WARN: warn
+  WARNING: warn
+  ERROR: error
+  FATAL: fatal
+  DEBUG: debug
+
+pattern_extraction:
+  - field: distributed.job_id
+    pattern: "job_\\d+_\\d+"
+
+  - field: distributed.task_id
+    pattern: "task_\\d+_\\d+_[m|r]_\\d+"
+
+  - field: distributed.operation
+    patterns:
+      - pattern: "Submitting tokens for job"
+        value: schedule
+      - pattern: "Launching task"
+        value: launch
+      - pattern: "Task attempt .* done"
+        value: other
+      - pattern: "reporting task status"
+        value: heartbeat

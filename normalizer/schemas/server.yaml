@@ -1,0 +1,63 @@
+_meta:
+  version: "1.0.0"
+  extends: "_base.yaml"
+  applies_to:
+    - apache
+    - openssh
+
+fields:
+  http:
+    type: object
+    required: false
+    description: "HTTP 관련 필드 (Apache 등)"
+    fields:
+      request:
+        type: object
+        fields:
+          method:
+            type: string
+          path:
+            type: string
+          protocol:
+            type: string
+      response:
+        type: object
+        fields:
+          status_code:
+            type: integer
+          bytes:
+            type: integer
+
+  ssh:
+    type: object
+    required: false
+    description: "SSH 인증/접속 관련 필드"
+    fields:
+      auth_method:
+        type: enum
+        values: [password, publickey, keyboard-interactive, unknown]
+      auth_result:
+        type: enum
+        values: [accepted, failed, invalid]
+      source_port:
+        type: integer
+
+  network:
+    type: object
+    required: false
+    description: "네트워크 공통 필드 (간단 버전)"
+    fields:
+      transport:
+        type: string
+      direction:
+        type: string
+
+  source:
+    type: object
+    fields:
+      ip:
+        type: string
+      port:
+        type: integer
+      user:
+        type: string

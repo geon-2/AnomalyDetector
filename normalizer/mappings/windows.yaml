@@ -1,0 +1,31 @@
+_meta:
+  source: windows
+  schema: os.yaml
+  description: "Windows Event Log 매핑"
+
+defaults:
+  log.source: windows
+  log.category: operating_system
+  os.type: windows
+  os.family: windows
+
+field_mapping:
+  TimeCreated: "@timestamp"      # 실제 필드명에 맞게 수정
+  Computer: host.name
+  EventID: os.event_id
+  Level: log.level
+  ProviderName: process.name
+  Message: message
+  User: os_user.name
+  Domain: os_user.domain
+
+timestamp:
+  fields: [TimeCreated]
+  format: "%Y-%m-%d %H:%M:%S"    # 실제 형식에 맞게 조정
+  timezone: UTC
+
+level_mapping:
+  Information: info
+  Warning: warn
+  Error: error
+  Critical: fatal

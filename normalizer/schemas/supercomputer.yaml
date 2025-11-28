@@ -1,0 +1,33 @@
+# 슈퍼컴퓨터 확장 스키마
+_meta:
+  version: "1.0.0"
+  extends: "_base.yaml"
+  applies_to:
+    - bgl
+    - hpc
+    - thunderbird
+
+fields:
+  supercomputer:
+    type: object
+    required: false
+    description: "슈퍼컴퓨터 / HPC 특화 필드"
+    fields:
+      node_location:
+        type: string
+        description: "노드 위치 / 슬롯 (RAS 등)"
+      component:
+        type: string
+        description: "하드웨어/소프트웨어 컴포넌트"
+      severity:
+        type: string
+        description: "이벤트 심각도"
+      ras_event_id:
+        type: string
+        description: "RAS 이벤트 ID 또는 코드"
+      mpi_rank:
+        type: integer
+        description: "MPI 프로세스 랭크"
+      job_id:
+        type: string
+        description: "작업 / 배치 잡 ID"

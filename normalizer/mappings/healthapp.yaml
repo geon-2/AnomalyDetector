@@ -1,0 +1,25 @@
+_meta:
+  source: healthapp
+  schema: mobile.yaml
+  description: "HealthApp 로그 매핑"
+
+defaults:
+  log.source: healthapp
+  log.category: mobile
+
+field_mapping:
+  Time: "@timestamp"
+  Level: log.level
+  AppName: app.name
+  Module: app.module
+  Message: message
+
+timestamp:
+  fields: [Time]
+  format: "%Y-%m-%d %H:%M:%S"
+  timezone: local
+
+level_mapping:
+  INFO: info
+  WARN: warn
+  ERROR: error

@@ -1,0 +1,24 @@
+_meta:
+  source: proxifier
+  schema: mobile.yaml
+  description: "Proxifier 스탠드얼론 소프트웨어 로그 매핑"
+
+defaults:
+  log.source: proxifier
+  log.category: standalone
+
+field_mapping:
+  Time: "@timestamp"
+  Level: log.level
+  App: app.name
+  Message: message
+
+timestamp:
+  fields: [Time]
+  format: "%Y-%m-%d %H:%M:%S"
+  timezone: local
+
+level_mapping:
+  Info: info
+  Warning: warn
+  Error: error

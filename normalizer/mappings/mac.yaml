@@ -1,0 +1,27 @@
+_meta:
+  source: mac
+  schema: os.yaml
+  description: "Mac OS 로그 매핑"
+
+defaults:
+  log.source: mac
+  log.category: operating_system
+  os.type: mac
+  os.family: unix
+
+field_mapping:
+  Date: "@timestamp"
+  Time: "@timestamp"
+  Hostname: host.name
+  Level: log.level
+  Process: process.name
+  PID: process.pid
+  Message: message
+
+timestamp:
+  fields: [Date, Time]
+  format: "%b %d %H:%M:%S"
+  timezone: local
+
+level_mapping:
+  default: info

@@ -1,0 +1,65 @@
+# schemas/distributed.yaml
+# ECS 9.2.0 기반 분산 시스템 확장 스키마
+# 
+# 분산 시스템(HDFS, Hadoop, Spark, Zookeeper, OpenStack) 로그에 대한 
+# ECS 9.2.0 확장 필드를 정의합니다.
+# 
+# 참고: distributed.* 필드는 ECS 표준에 없는 커스텀 필드입니다.
+#       분산 시스템 특화 정보를 저장하기 위해 사용됩니다.
+#
+_meta:
+  version: "1.0.0"
+  ecs_version: "9.2.0"
+  extends: "_base.yaml"
+  applies_to:
+    - hdfs
+    - hadoop
+    - spark
+    - zookeeper
+    - openstack
+
+fields:
+  distributed:
+    type: object
+    required: false
+    description: "분산 시스템(HDFS, Hadoop, Spark, Zookeeper, OpenStack) 공통 필드"
+    fields:
+      block_id:
+        type: string
+        description: "블록/청크 ID (주로 HDFS)"
+        example: "blk_-1608999687919862906"
+      node_id:
+        type: string
+        description: "노드 또는 엔드포인트 ID/주소"
+        example: "10.250.19.102:50010"
+      job_id:
+        type: string
+        description: "잡/워크플로 ID (Hadoop/Spark/OpenStack)"
+      task_id:
+        type: string
+        description: "태스크/시도 ID"
+      container_id:
+        type: string
+        description: "컨테이너/인스턴스 ID (YARN, OpenStack 등)"
+      session_id:
+        type: string
+        description: "세션/커넥션 ID (Zookeeper 등)"
+      operation:
+        type: enum
+        values:
+          - read
+          - write
+          - replicate
+          - delete
+          - allocate
+          - release
+          - schedule
+          - launch
+          - heartbeat
+          - connect
+          - disconnect
+          - other
+        description: "주요 작업 유형"
+      status:
+        type: string
+        description: "작업 상태(success, failure 등 자유 텍스트 또는 정규화)"

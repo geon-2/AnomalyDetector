@@ -1,0 +1,37 @@
+_meta:
+  source: linux
+  schema: os.yaml
+  description: "Linux syslog 매핑"
+
+defaults:
+  log.source: linux
+  log.category: operating_system
+  os.type: linux
+  os.family: unix
+
+field_mapping:
+  Month: "@timestamp"
+  Date: "@timestamp"
+  Time: "@timestamp"
+  Hostname: host.name
+  Level: log.level
+  Facility: os.facility
+  Process: process.name
+  PID: process.pid
+  Message: message
+
+timestamp:
+  fields: [Month, Date, Time]
+  format: "%b %d %H:%M:%S"
+  timezone: local    # 필요시 시간대 지정
+
+level_mapping:
+  INFO: info
+  NOTICE: info
+  WARN: warn
+  WARNING: warn
+  ERR: error
+  ERROR: error
+  CRIT: fatal
+  ALERT: fatal
+  EMERG: fatal

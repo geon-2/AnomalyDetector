@@ -1,0 +1,174 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: log-collector
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: log-collector
+  template:
+    metadata:
+      labels:
+        app: log-collector
+    spec:
+      containers:
+      - name: log-collector
+        image: log-collector:latest
+        imagePullPolicy: Never
+        env:
+        - name: LOG_FILE
+          valueFrom:
+            configMapKeyRef:
+              name: anomaly-detector-config
+              key: LOG_FILE
+        - name: NORMALIZER_URL
+          value: "http://normalizer-service:5001/normalize"
+        - name: BATCH_SIZE
+          valueFrom:
+            configMapKeyRef:
+              name: anomaly-detector-config
+              key: BATCH_SIZE
+        - name: DELAY
+          valueFrom:
+            configMapKeyRef:
+              name: anomaly-detector-config
+              key: DELAY
+      restartPolicy: Always
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: normalizer
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: normalizer
+  template:
+    metadata:
+      labels:
+        app: normalizer
+    spec:
+      containers:
+      - name: normalizer
+        image: normalizer:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5001
+        env:
+        - name: DETECTOR_URL
+          value: "http://detector-service:5002/analyze"
+        - name: LLM_SERVICE_URL
+          value: "http://llm-service:8000/generate_schema"
+        - name: USE_LLM
+          valueFrom:
+            configMapKeyRef:
+              name: anomaly-detector-config
+              key: USE_LLM
+        - name: AUTO_SCHEMA_GENERATION
+          valueFrom:
+            configMapKeyRef:
+              name: anomaly-detector-config
+              key: AUTO_SCHEMA_GENERATION
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: detector
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: detector
+  template:
+    metadata:
+      labels:
+        app: detector
+    spec:
+      containers:
+      - name: detector
+        image: detector:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5002
+        env:
+        - name: VISUALIZER_URL
+          value: "http://visualizer-service:8502/event"
+        - name: MODEL_DIR
+          value: "/models"
+        - name: MAX_SEQUENCE_LENGTH
+          valueFrom:
+            configMapKeyRef:
+              name: anomaly-detector-config
+              key: MAX_SEQUENCE_LENGTH
+        - name: MODEL_TYPE
+          valueFrom:
+            configMapKeyRef:
+              name: anomaly-detector-config
+              key: MODEL_TYPE
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: visualizer
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: visualizer
+  template:
+    metadata:
+      labels:
+        app: visualizer
+    spec:
+      containers:
+      - name: visualizer
+        image: visualizer:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8502
+        #   limits:
+        #     memory: "8Gi"
+        #     cpu: "4"
+        #   requests:
+        #     memory: "4Gi"
+        #     cpu: "2"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llm-service
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: llm-service
+  template:
+    metadata:
+      labels:
+        app: llm-service
+    spec:
+      containers:
+      - name: llm-service
+        image: llm-service:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8000
+        env:
+        - name: BASE_MODEL
+          value: "meta-llama/Meta-Llama-3-8B-Instruct"
+        - name: LORA_ADAPTER
+          value: "/models/llm/llama3-ecs-schema-generator"
+        resources:
+          limits:
+            memory: "8Gi"
+            cpu: "4"
+          requests:
+            memory: "4Gi"
+            cpu: "2"

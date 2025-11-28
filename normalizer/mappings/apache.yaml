@@ -1,0 +1,26 @@
+_meta:
+  source: apache
+  schema: server.yaml
+  description: "Apache access/error 로그 매핑"
+
+defaults:
+  log.source: apache
+  log.category: server_application
+
+field_mapping:
+  Time: "@timestamp"
+  IP: source.ip
+  Method: http.request.method
+  URL: http.request.path
+  Protocol: http.request.protocol
+  Status: http.response.status_code
+  Size: http.response.bytes
+  Message: message
+
+timestamp:
+  fields: [Time]
+  format: "%d/%b/%Y:%H:%M:%S %z"
+  timezone: local
+
+level_mapping:
+  default: info

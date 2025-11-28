@@ -1,0 +1,49 @@
+# mappings/spark.yaml
+_meta:
+  source: spark
+  schema: distributed.yaml
+  description: "Spark job 로그 → 정규화 스키마 매핑"
+
+defaults:
+  log.source: spark
+  log.category: distributed_system
+
+field_mapping:
+  Date: "@timestamp"
+  Time: "@timestamp"
+  Level: log.level
+  Component: process.name
+  Content: message
+
+timestamp:
+  fields: [Date, Time]
+  format: "%y/%m/%d %H:%M:%S"   # 실제 포맷에 맞게 수정
+  timezone: UTC
+
+level_mapping:
+  INFO: info
+  WARN: warn
+  WARNING: warn
+  ERROR: error
+  DEBUG: debug
+  FATAL: fatal
+
+pattern_extraction:
+  - field: distributed.job_id
+    pattern: "jobId=(\\d+)"
+
+  - field: distributed.task_id
+    pattern: "task (\\d+\\.\\d+)"
+
+  - field: distributed.operation
+    patterns:
+      - pattern: "Starting job"
+        value: schedule
+      - pattern: "Finished job"
+        value: other
+      - pattern: "Submitting"
+        value: schedule
+      - pattern: "Launching task"
+        value: launch
+      - pattern: "Executor heartbeat"
+        value: heartbeat

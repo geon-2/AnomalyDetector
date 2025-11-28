@@ -1,0 +1,39 @@
+_meta:
+  version: "1.0.0"
+  extends: "_base.yaml"
+  applies_to:
+    - android
+    - healthapp
+    - proxifier
+
+fields:
+  android:
+    type: object
+    required: false
+    description: "Android 프레임워크/앱 로그"
+    fields:
+      component:
+        type: string
+      tag:
+        type: string
+      app:
+        type: object
+        fields:
+          package:
+            type: string
+          uid:
+            type: integer
+      activity:
+        type: string
+
+  app:
+    type: object
+    required: false
+    description: "일반 애플리케이션 공통 필드 (HealthApp, Proxifier 등)"
+    fields:
+      name:
+        type: string
+      version:
+        type: string
+      module:
+        type: string

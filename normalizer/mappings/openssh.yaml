@@ -1,0 +1,50 @@
+_meta:
+  source: openssh
+  schema: server.yaml
+  description: "OpenSSH 서버 로그 매핑"
+
+defaults:
+  log.source: openssh
+  log.category: server_application
+
+field_mapping:
+  Date: "@timestamp"
+  Day: "@timestamp"
+  Time: "@timestamp"
+  Hostname: host.name
+  Level: log.level
+  Process: process.name
+  PID: process.pid
+  Message: message
+  Address: source.ip
+  User: source.user
+
+timestamp:
+  fields: [Date, Day, Time]
+  format: "%b %d %H:%M:%S"
+  timezone: local
+
+level_mapping:
+  INFO: info
+  ERROR: error
+  WARN: warn
+
+pattern_extraction:
+  - field: ssh.auth_method
+    patterns:
+      - pattern: "password"
+        value: password
+      - pattern: "publickey"
+        value: publickey
+
+  - field: ssh.auth_result
+    patterns:
+      - pattern: "Accepted"
+        value: accepted
+      - pattern: "Failed"
+        value: failed
+      - pattern: "Invalid"
+        value: invalid
+
+  - field: ssh.source_port
+    pattern: "port (\\d+)"

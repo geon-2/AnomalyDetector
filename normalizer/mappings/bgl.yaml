@@ -1,0 +1,35 @@
+_meta:
+  source: bgl
+  schema: supercomputer.yaml
+  description: "Blue Gene/L 로그 매핑"
+
+defaults:
+  log.source: bgl
+  log.category: supercomputer
+
+field_mapping:
+  Timestamp: "@timestamp"   # epoch 또는 문자열
+  Date: "@timestamp"        # 둘 중 하나 사용
+  Node: host.name
+  Type: log.level
+  Component: supercomputer.component
+  Level: supercomputer.severity
+  Content: message
+
+timestamp:
+  fields: [Timestamp]
+  format: "epoch"           # 실제 포맷에 맞게 조정
+  timezone: UTC
+
+level_mapping:
+  INFO: info
+  WARNING: warn
+  WARN: warn
+  SEVERE: error
+  ERROR: error
+  FATAL: fatal
+  FAILURE: fatal
+
+pattern_extraction:
+  - field: supercomputer.node_location
+    pattern: "R\\d+-M\\d+-N\\d+-C:[A-Z0-9-]+"
