@@ -1,0 +1,35 @@
+081109 203615 148 INFO dfs.DataNode$PacketResponder: PacketResponder 1 for block blk_38865049064139660 terminating
+081109 203807 222 INFO dfs.DataNode$PacketResponder: PacketResponder 0 for block blk_-6952295868487656571 terminating
+081109 204005 35 INFO dfs.FSNamesystem: BLOCK* NameSystem.addStoredBlock: blockMap updated: 10.251.73.220:50010 is added to blk_7128370237687728475 size 67108864
+081109 204015 308 INFO dfs.DataNode$PacketResponder: PacketResponder 2 for block blk_8229193803249955061 terminating
+081109 204106 329 ERROR dfs.DataNode$PacketResponder: Connection timeout for block blk_-6670958622368987959 from client 10.251.42.84
+081109 204132 26 INFO dfs.FSNamesystem: BLOCK* NameSystem.addStoredBlock: blockMap updated: 10.251.43.115:50010 is added to blk_3050920587428079149 size 67108864
+081109 204324 34 WARN dfs.DataNode: Disk space critically low on /data/hdfs - only 2.3GB remaining
+081109 204453 34 INFO dfs.FSNamesystem: BLOCK* NameSystem.addStoredBlock: blockMap updated: 10.250.11.85:50010 is added to blk_2377150260128098806 size 67108864
+081109 204525 512 INFO dfs.DataNode$PacketResponder: PacketResponder 2 for block blk_572492839287299681 terminating
+081109 204655 556 ERROR dfs.DataNode: Failed to transfer block blk_3587508140051953248 to 10.251.42.84 - IOException: Network unreachable
+081109 204722 567 INFO dfs.DataNode$PacketResponder: Received block blk_5402003568334525940 of size 67108864 from /10.251.214.112
+081109 204815 653 INFO dfs.DataNode$DataXceiver: Receiving block blk_5792489080791696128 src: /10.251.30.6:33145 dest: /10.251.30.6:50010
+081109 204842 663 WARN dfs.NameNode: NameNode heap memory usage at 92% - possible memory leak detected
+081109 204908 31 INFO dfs.FSNamesystem: BLOCK* NameSystem.addStoredBlock: blockMap updated: 10.251.110.8:50010 is added to blk_8015913224713045110 size 67108864
+081109 204925 673 INFO dfs.DataNode$DataXceiver: Receiving block blk_-5623176793330377570 src: /10.251.75.228:53725 dest: /10.251.75.228:50010
+081109 205035 28 ERROR dfs.DataNode: Block blk_-1727475099218615100 verification failed - checksum mismatch
+081109 205056 710 INFO dfs.DataNode$PacketResponder: PacketResponder 1 for block blk_5017373558217225674 terminating
+081109 205157 752 INFO dfs.DataNode$PacketResponder: Received block blk_9212264480425680329 of size 67108864 from /10.251.123.1
+081109 205315 29 INFO dfs.FSNamesystem: BLOCK* NameSystem.allocateBlock: /user/root/rand/_temporary/_task_200811092030_0001_m_000742_0/part-00742. blk_-7878121102358435702
+081109 205409 28 FATAL dfs.DataNode: Unexpected exception in DataNode - shutting down: java.lang.OutOfMemoryError: Java heap space
+081109 205615 148 INFO dfs.DataNode$PacketResponder: PacketResponder 1 for block blk_38865049064139661 terminating
+081109 205807 222 INFO dfs.DataNode$PacketResponder: PacketResponder 0 for block blk_-6952295868487656572 terminating
+081109 206005 35 INFO dfs.FSNamesystem: BLOCK* NameSystem.addStoredBlock: blockMap updated: 10.251.73.220:50010 is added to blk_7128370237687728476 size 67108864
+081109 206015 308 ERROR dfs.DataNode: DataNode heartbeat failed - connection refused by NameNode
+081109 206106 329 INFO dfs.DataNode$PacketResponder: PacketResponder 2 for block blk_-6670958622368987960 terminating
+081109 206132 26 INFO dfs.FSNamesystem: BLOCK* NameSystem.addStoredBlock: blockMap updated: 10.251.43.115:50010 is added to blk_3050920587428079150 size 67108864
+081109 206324 34 WARN dfs.FSNamesystem: Too many under-replicated blocks detected - replication queue size: 15432
+081109 206453 34 INFO dfs.FSNamesystem: BLOCK* NameSystem.addStoredBlock: blockMap updated: 10.250.11.85:50010 is added to blk_2377150260128098807 size 67108864
+081109 206525 512 INFO dfs.DataNode$PacketResponder: PacketResponder 2 for block blk_572492839287299682 terminating
+081109 206655 556 INFO dfs.DataNode$PacketResponder: Received block blk_3587508140051953249 of size 67108864 from /10.251.42.84
+081109 206722 567 ERROR dfs.DataNode: Block replication failed for blk_5402003568334525941 - no available DataNodes
+081109 206815 653 INFO dfs.DataNode$DataXceiver: Receiving block blk_5792489080791696129 src: /10.251.30.6:33146 dest: /10.251.30.6:50010
+081109 206842 663 INFO dfs.DataNode$DataXceiver: Receiving block blk_1724757848743533111 src: /10.251.111.130:49852 dest: /10.251.111.130:50010
+081109 206908 31 INFO dfs.FSNamesystem: BLOCK* NameSystem.addStoredBlock: blockMap updated: 10.251.110.8:50010 is added to blk_8015913224713045111 size 67108864
+081109 206925 673 CRITICAL dfs.NameNode: Cluster storage utilization exceeded 95% threshold - emergency cleanup required

@@ -30,35 +30,44 @@ def wait_for_service(url, max_retries=30, delay=3):
 
 
 def stream_logs():
-    """로그 파일을 읽어 전송"""
+    """로그 파일을 읽어 전송 (무한 반복)"""
     print(f"[log-collector] Starting log streaming from {LOG_FILE}")
 
     if not Path(LOG_FILE).exists():
         print(f"[log-collector] ❌ Log file not found: {LOG_FILE}")
         return
 
-    with open(LOG_FILE, 'r') as f:
-        batch = []
-        line_count = 0
+    iteration = 0
+    while True:
+        iteration += 1
+        print(f"[log-collector] 🔄 Iteration {iteration} - Starting log stream")
 
-        for line in f:
-            log = line.strip()
-            if not log:
-                continue
+        with open(LOG_FILE, 'r') as f:
+            batch = []
+            line_count = 0
 
-            batch.append(log)
-            line_count += 1
+            for line in f:
+                log = line.strip()
+                if not log:
+                    continue
 
-            if len(batch) >= BATCH_SIZE:
+                batch.append(log)
+                line_count += 1
+
+                if len(batch) >= BATCH_SIZE:
+                    send_batch(batch)
+                    batch = []
+                    time.sleep(DELAY)
+
+            # Send remaining logs
+            if batch:
                 send_batch(batch)
-                batch = []
-                time.sleep(DELAY)
 
-        # Send remaining logs
-        if batch:
-            send_batch(batch)
+            print(f"[log-collector] ✅ Finished streaming {line_count} logs (iteration {iteration})")
 
-        print(f"[log-collector] ✅ Finished streaming {line_count} logs")
+        # Wait before next iteration
+        print(f"[log-collector] ⏸️  Waiting 30 seconds before next iteration...")
+        time.sleep(30)
 
 
 def send_batch(batch):

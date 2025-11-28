@@ -6,8 +6,8 @@ metadata:
 data:
   # Log Collector 설정
   LOG_FILE: "/data/HDFS_2k.log"
-  BATCH_SIZE: "10"
-  DELAY: "0.5"
+  BATCH_SIZE: "5"
+  DELAY: "1.0"
 
   # Detector 설정
   MAX_SEQUENCE_LENGTH: "50"
