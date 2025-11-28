@@ -75,6 +75,22 @@ def get_events():
     }), 200
 
 
+@app.route("/anomalies", methods=["GET"])
+def get_anomalies():
+    """이상 로그만 조회 (shortcut for /events?status=anomaly)"""
+    limit = request.args.get("limit", default=100, type=int)
+
+    anomalies = [e for e in events if e["status"] == "anomaly"]
+
+    # 최신 이벤트부터 반환
+    anomalies.reverse()
+
+    return jsonify({
+        "anomalies": anomalies[:limit],
+        "total": len(anomalies)
+    }), 200
+
+
 @app.route("/statistics", methods=["GET"])
 def get_statistics():
     """통계 정보 조회"""
