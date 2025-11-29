@@ -195,7 +195,9 @@ with tab3:
 
         llm_analyzed_count = sum(
             1 for a in anomalies
-            if a.get("llm_analysis", {}).get("llm_analyzed") is True
+            if isinstance(a, dict)
+            and isinstance(a.get("llm_analysis"), dict)
+            and a["llm_analysis"].get("llm_analyzed") is True
         )
 
         col1, col2 = st.columns(2)
