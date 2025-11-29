@@ -213,7 +213,10 @@ with tab3:
         anomalies = anomalies_data["anomalies"]
 
         # LLM 분석 통계
-        llm_analyzed_count = sum(1 for a in anomalies if a.get("llm_analysis", {}).get("llm_analyzed"))
+        llm_analyzed_count = sum(
+            1 for a in anomalies
+            if (a or {}).get("llm_analysis", {}).get("llm_analyzed") is True
+        )
         total_anomalies = len(anomalies)
 
         col1, col2 = st.columns(2)

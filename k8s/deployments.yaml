@@ -36,6 +36,7 @@ spec:
               name: anomaly-detector-config
               key: DELAY
       restartPolicy: Always
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -61,6 +62,22 @@ spec:
         env:
         - name: DETECTOR_URL
           value: "http://detector-service:5002/analyze"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: normalizer-service
+  namespace: default
+spec:
+  selector:
+    app: normalizer
+  ports:
+  - protocol: TCP
+    port: 5001
+    targetPort: 5001
+  type: ClusterIP
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -98,6 +115,22 @@ spec:
             configMapKeyRef:
               name: anomaly-detector-config
               key: MODEL_TYPE
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: detector-service
+  namespace: default
+spec:
+  selector:
+    app: detector
+  ports:
+  - protocol: TCP
+    port: 5002
+    targetPort: 5002
+  type: ClusterIP
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -120,12 +153,29 @@ spec:
         imagePullPolicy: Never
         ports:
         - containerPort: 8502
-        #   limits:
-        #     memory: "8Gi"
-        #     cpu: "4"
-        #   requests:
-        #     memory: "4Gi"
-        #     cpu: "2"
+        resources:
+          limits:
+            memory: "8Gi"
+            cpu: "4"
+          requests:
+            memory: "4Gi"
+            cpu: "2"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: visualizer-service
+  namespace: default
+spec:
+  selector:
+    app: visualizer
+  ports:
+  - protocol: TCP
+    port: 8502
+    targetPort: 8502
+  type: ClusterIP
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -145,6 +195,44 @@ spec:
       containers:
       - name: llm-service
         image: llm-service:latest
-        imagePullPolicy: Never
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8000
+        resources:
+          limits:
+            memory: "10Gi"
+            cpu: "4"
+          requests:
+            memory: "8Gi"
+            cpu: "2"
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 60
+          periodSeconds: 20
+          timeoutSeconds: 5
+          failureThreshold: 3
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: llm-service
+  namespace: default
+spec:
+  selector:
+    app: llm-service
+  ports:
+  - protocol: TCP
+    port: 8000
+    targetPort: 8000
+  type: ClusterIP

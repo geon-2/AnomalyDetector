@@ -1,3 +1,6 @@
+include .env
+export $(shell sed 's/=.*//' .env)
+
 .PHONY: build deploy clean restart logs test
 
 # Docker 환경 설정
@@ -8,15 +11,15 @@ docker-env:
 build:
 	@echo "Building Docker images..."
 	@eval $$(minikube docker-env) && \
-	echo "[1/5] Building log-collector..." && \
+	echo "[1/6] Building log-collector..." && \
 	cp ./data/HDFS_2k.log ./services/log-collector/HDFS_2k.log && \
 	docker build -t log-collector:latest ./services/log-collector && \
 	rm -f ./services/log-collector/HDFS_2k.log && \
-	echo "[2/5] Building normalizer..." && \
+	echo "[2/6] Building normalizer..." && \
 	cp -r ./normalizer ./services/normalizer/normalizer && \
 	docker build -t normalizer:latest ./services/normalizer && \
 	rm -rf ./services/normalizer/normalizer && \
-	echo "[3/5] Building detector..." && \
+	echo "[3/6] Building detector..." && \
 	mkdir -p ./services/detector/models && \
 	cp ./models/*.pkl ./services/detector/models/ 2>/dev/null || true && \
 	cp ./models/*.pth ./services/detector/models/ 2>/dev/null || true && \
@@ -25,7 +28,9 @@ build:
 	echo "[4/5] Building visualizer..." && \
 	docker build -t visualizer:latest ./services/visualizer && \
 	echo "[5/5] Building llm-service..." && \
-	docker build -t llm-service:latest ./services/llm-service && \
+	docker build \
+		--build-arg HF_TOKEN=$(HF_TOKEN) \
+		-t llm-service:latest ./services/llm-service && \
 	echo "✅ All images built successfully!"
 
 # Kubernetes 배포

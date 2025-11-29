@@ -4,3 +4,7 @@ data
 
 loghub-master
 ecs-9.2.0
+
+.env
+
+.DS_Store

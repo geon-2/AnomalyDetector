@@ -12,3 +12,6 @@ data:
   # Detector 설정
   MAX_SEQUENCE_LENGTH: "50"
   MODEL_TYPE: "gru"
+
+  # LLM Service 설정
+  MODEL_NAME: "TinyLlama/TinyLlama-1.1B-Chat-v1.0"

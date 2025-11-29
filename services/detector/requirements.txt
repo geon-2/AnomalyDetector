@@ -1,6 +1,6 @@
-flask==3.0.0
-requests==2.31.0
-torch==2.0.1
-numpy==1.24.3
-joblib==1.3.2
-drain3==0.9.11
+flask
+requests
+torch
+numpy
+joblib
+drain3
