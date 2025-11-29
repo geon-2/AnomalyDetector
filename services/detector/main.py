@@ -466,7 +466,7 @@ def send_to_visualizer(anomaly_result, ecs_log):
                     "status": anomaly_result["status"]
                 }
 
-                llm_response = requests.post(LLM_SERVICE_URL, json=llm_payload, timeout=10)
+                llm_response = requests.post(LLM_SERVICE_URL, json=llm_payload, timeout=60)
 
                 if llm_response.status_code == 200:
                     llm_analysis = llm_response.json()
