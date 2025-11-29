@@ -25,12 +25,14 @@ build:
 	cp ./models/*.pth ./services/detector/models/ 2>/dev/null || true && \
 	docker build -t detector:latest ./services/detector && \
 	rm -rf ./services/detector/models && \
-	echo "[4/5] Building visualizer..." && \
+	echo "[4/6] Building visualizer..." && \
 	docker build -t visualizer:latest ./services/visualizer && \
-	echo "[5/5] Building llm-service..." && \
+	echo "[5/6] Building llm-service..." && \
 	docker build \
 		--build-arg HF_TOKEN=$(HF_TOKEN) \
 		-t llm-service:latest ./services/llm-service && \
+	echo "[6/6] Building llm-queue..." && \
+	docker build -t llm-queue:latest ./services/llm-queue && \
 	echo "✅ All images built successfully!"
 
 # Kubernetes 배포
@@ -62,6 +64,7 @@ restart:
 	@kubectl rollout restart deployment/detector
 	@kubectl rollout restart deployment/visualizer
 	@kubectl rollout restart deployment/llm-service
+	@kubectl rollout restart deployment/llm-queue
 	@echo "✅ Pods restarted!"
 
 # 로그 확인

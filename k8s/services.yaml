@@ -58,3 +58,18 @@ spec:
     port: 8000
     targetPort: 8000
   type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: llm-queue-service
+  namespace: default
+spec:
+  selector:
+    app: llm-queue
+  ports:
+  - protocol: TCP
+    port: 9001
+    targetPort: 9001
+  type: ClusterIP

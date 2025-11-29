@@ -450,52 +450,36 @@ def detect_anomaly(template_sequence):
 
 
 def send_to_visualizer(anomaly_result, ecs_log):
-    """이상 탐지 결과를 LLM으로 분석 후 Visualizer로 전송"""
+    """이상 탐지 결과를 큐에 넣고 우선 visualizer로 전송"""
     try:
-        llm_analysis = None
-
-        # 이상 탐지된 경우 LLM Service에서 분석 요청
-        if anomaly_result["status"] == "anomaly":
-            try:
-                llm_payload = {
-                    "log": {
-                        "message": ecs_log.get("message", ""),
-                        "loss": anomaly_result["loss"],
-                        "threshold": anomaly_result["threshold"]
-                    },
-                    "status": anomaly_result["status"]
-                }
-
-                llm_response = requests.post(LLM_SERVICE_URL, json=llm_payload, timeout=60)
-
-                if llm_response.status_code == 200:
-                    llm_analysis = llm_response.json()
-                    print(f"[detector] ✅ LLM analysis received: {llm_analysis.get('severity', 'N/A')}")
-                else:
-                    print(f"[detector] ⚠️ LLM service response: {llm_response.status_code}")
-
-            except Exception as llm_error:
-                print(f"[detector] ⚠️ LLM service error: {llm_error}")
-
-        # Visualizer로 전송 (LLM 분석 결과 포함)
+        # 항상 visualizer에는 즉시 전달
         payload = {
             "loss": anomaly_result["loss"],
             "status": anomaly_result["status"],
             "threshold": anomaly_result["threshold"],
             "log": ecs_log,
-            "llm_analysis": llm_analysis
+            "llm_analysis": None  # 초기에는 LLM 결과 없음
         }
 
-        response = requests.post(VISUALIZER_URL, json=payload, timeout=5)
+        requests.post(VISUALIZER_URL, json=payload, timeout=4)
 
-        if response.status_code == 200:
-            print(f"[detector] ✅ Sent result to visualizer: {anomaly_result['status']}")
-        else:
-            print(f"[detector] ⚠️ Visualizer response: {response.status_code}")
+        # ⬇️ anomaly면 LLM 분석을 위한 큐에 push
+        if anomaly_result["status"] == "anomaly":
+            try:
+                queue_payload = {
+                    "loss": anomaly_result["loss"],
+                    "status": anomaly_result["status"],
+                    "threshold": anomaly_result["threshold"],
+                    "log": ecs_log,
+                }
+                requests.post("http://llm-queue-service:9001/push", json=queue_payload, timeout=1)
+                print("[detector] 📌 LLM task queued")
+            except Exception as e:
+                print(f"[detector] ⚠️ LLM queue push failed: {e}")
 
+        print(f"[detector] 🚀 anomaly sent to visualizer (LLM later)")
     except Exception as e:
-        print(f"[detector] ⚠️ Failed to send to visualizer: {e}")
-
+        print(f"[detector] ⚠️ Failed to send event: {e}")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5002)

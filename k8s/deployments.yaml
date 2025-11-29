@@ -236,3 +236,26 @@ spec:
     port: 8000
     targetPort: 8000
   type: ClusterIP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llm-queue
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: llm-queue
+  template:
+    metadata:
+      labels:
+        app: llm-queue
+    spec:
+      containers:
+      - name: llm-queue
+        image: llm-queue:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 9001
